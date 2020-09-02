@@ -1,8 +1,8 @@
-# dallascarrraher.github.io
+# .markdown
 
 ## Project setup
 ```
-yarn install
+yarn
 ```
 
 ### Compiles and hot-reloads for development
