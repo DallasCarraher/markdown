@@ -7,23 +7,24 @@
 
 <script>
 import Navigation from "./components/Navigation";
+import Notes from "./components/Notes";
 
 export default {
   name: "App",
   components: {
     Navigation,
+    Notes,
   },
 };
 </script>
 
 <style>
 * {
-  box-sizing: border-box;
   margin: 0;
   padding: 0;
 }
 #app {
-  font-family: "Avenir", Helvetica, Arial, sans-serif;
+  font-family: "Avenir", sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   color: #2c3e50;
