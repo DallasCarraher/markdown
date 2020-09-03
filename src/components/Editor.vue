@@ -15,6 +15,7 @@
 </template>
 
 <script>
+import firebase from "firebase";
 import marked from "marked";
 import { debounce } from "lodash";
 import db from "../config/firebaseInit";
@@ -37,7 +38,7 @@ export default {
     };
   },
   computed: {
-    compiledMarkdown: function () {
+    compiledMarkdown: function() {
       return marked(this.text, { sanitize: true });
     },
   },
@@ -50,7 +51,7 @@ export default {
     // clearInterval(this.autoSave);
   },
   methods: {
-    fetchData: async function () {
+    fetchData: async function() {
       try {
         const document = await db.collection("files").doc(this.documentId);
         this.documentRef = document;
@@ -68,22 +69,25 @@ export default {
         this.text = "# failed to fetch your file";
       }
     },
-    loadData: function (data) {
+    loadData: function(data) {
       this.id = data.id;
       this.owner = data.owner;
       this.savedAt = data.savedAtl;
       this.text = data.text;
     },
-    compile: debounce(function (e) {
+    compile: debounce(function(e) {
       this.text = e.target.value;
     }, 0),
     // autoSave: function () {
     //   this.autoSaveRef = setInterval(this.save(), 10000);
     // },
-    save: async function () {
+    save: async function() {
       try {
         (await this.documentRef) &&
-          this.documentRef.update({ text: this.text });
+          this.documentRef.update({
+            text: this.text,
+            savedAt: firebase.firestore.FieldValue.serverTimestamp(),
+          });
       } catch (e) {
         console.error(e);
       }
