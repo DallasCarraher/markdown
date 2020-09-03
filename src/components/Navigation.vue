@@ -1,6 +1,6 @@
 <template>
   <header id="navigation">
-    <h2 id="my-name">.markdown</h2>
+    <h2 id="title">.markdown</h2>
   </header>
 </template>
 
@@ -19,7 +19,8 @@ export default {
   padding: 10px;
   margin: 0;
 }
-#my-name {
+#title {
+  flex: 1;
   font-weight: "bold";
 }
 </style>
