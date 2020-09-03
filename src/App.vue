@@ -1,19 +1,24 @@
 <template>
   <div id="app">
     <Navigation />
-    <Notes />
+    <Editor :documentId="documentId" />
   </div>
 </template>
 
 <script>
 import Navigation from "./components/Navigation";
-import Notes from "./components/Notes";
+import Editor from "./components/Editor";
 
 export default {
   name: "App",
   components: {
     Navigation,
-    Notes,
+    Editor,
+  },
+  data() {
+    return {
+      documentId: "uTixWrVf75KfC2D37iR8",
+    };
   },
 };
 </script>
