@@ -1,18 +1,18 @@
 <template>
-  <header id="navigation">
+  <header id="header">
     <h2 id="title">.markdown</h2>
   </header>
 </template>
 
 <script>
 export default {
-  name: "Navigation",
+  name: "Header",
   components: {},
 };
 </script>
 
 <style scoped>
-#navigation {
+#header {
   display: flex;
   flex-direction: row;
   border-bottom: solid;
