@@ -1,9 +1,14 @@
 import { createRouter, createWebHashHistory } from "vue-router";
-import Markdown from "../views/Markdown.vue";
+import { Markdown, Home } from "../views";
 
 const routes = [
   {
     path: "/",
+    name: "Home",
+    component: Home,
+  },
+  {
+    path: "/markdown",
     name: "Markdown",
     component: Markdown,
   },
