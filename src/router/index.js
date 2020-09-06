@@ -8,7 +8,7 @@ const routes = [
     component: Home,
   },
   {
-    path: "/markdown",
+    path: "/markdown/:documentId",
     name: "Markdown",
     component: Markdown,
   },
