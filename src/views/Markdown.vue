@@ -17,7 +17,7 @@ export default {
   },
   data() {
     return {
-      documentId: "uTixWrVf75KfC2D37iR8",
+      documentId: this.$route.params.documentId,
     };
   },
 };
