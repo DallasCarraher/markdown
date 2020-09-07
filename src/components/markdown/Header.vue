@@ -1,6 +1,13 @@
 <template>
   <header id="header">
-    <h2 id="title">.markdown</h2>
+    <h2 id="title">
+      <a
+        href="/"
+        @mouseover="title = '← go back'"
+        @mouseout="title = '.markdown'"
+        >{{ title }}</a
+      >
+    </h2>
   </header>
 </template>
 
@@ -8,6 +15,11 @@
 export default {
   name: "Header",
   components: {},
+  data() {
+    return {
+      title: ".markdown",
+    };
+  },
 };
 </script>
 
@@ -22,5 +34,9 @@ export default {
 #title {
   flex: 1;
   font-weight: "bold";
+}
+a {
+  color: inherit;
+  text-decoration: none;
 }
 </style>
