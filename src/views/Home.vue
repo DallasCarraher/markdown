@@ -1,27 +1,13 @@
 <template>
   <div id="app">
     <div id="title-container">
-      <header id="title" />
+      <a href="/">
+        <header id="title" />
+      </a>
     </div>
     <div id="login-form">
-      <!-- !signIn && !signUp -->
-      <button id="login-button" @click="showLogin" v-if="!signIn && !signUp">
-        v
-      </button>
-
-      <!-- signUp -->
-      <div id="login-input-container" v-if="signUp">
-        <label for="name">Username </label>
-        <input
-          type="text"
-          name="username"
-          id="login-input"
-          maxlength="20"
-          size="20"
-          @keyup.enter="$event.target.nextElementSibling.focus()"
-        />
-      </div>
-      <div id="login-input-container" v-if="signUp">
+      <!-- Email -->
+      <div id="login-input-container">
         <label for="name">Email &nbsp; &nbsp; &nbsp; &nbsp;</label>
         <input
           type="email"
@@ -30,33 +16,12 @@
           maxlength="60"
           size="20"
           @keyup.enter="$event.target.nextElementSibling.focus()"
+          v-model="email"
         />
       </div>
-      <div id="login-input-container" v-if="signUp">
-        <label for="password">Password </label>
-        <input
-          type="password"
-          name="password"
-          id="login-input"
-          maxlength="20"
-          size="20"
-        />
-      </div>
-
-      <!-- signIn -->
-      <div id="login-input-container" v-if="signIn">
-        <label for="name">Username </label>
-        <input
-          type="text"
-          name="username"
-          id="login-input"
-          maxlength="20"
-          size="20"
-          @keyup.enter="$event.target.nextElementSibling.focus()"
-        />
-      </div>
-      <div id="login-input-container" v-if="signIn">
-        <label for="password">Password </label>
+      <!-- Password -->
+      <div id="login-input-container">
+        <label for="password">Password &nbsp;</label>
         <input
           type="password"
           name="password"
@@ -64,15 +29,30 @@
           maxlength="20"
           size="20"
           @keyup.enter="login"
+          v-model="password"
         />
       </div>
-      <div v-if="signIn">
-        <button id="login-button" @click="login">></button>
+
+      <!-- signUp -->
+      <div v-if="signUp">
+        <button id="login-button" @click="create">+</button>
+        &nbsp; submit
+        <div>
+          <button id="login-button" @click="signUp = !signUp">&lt;</button>
+          go back &nbsp;
+        </div>
       </div>
-      <div v-if="signIn" id="create-account">
-        create an account &nbsp;
-        <button id="login-button" @click="showSignUp">+</button>
+
+      <!-- signIn -->
+      <div v-if="!signUp">
+        <button id="login-button" @click="signUp = !signUp">+</button>
+        create account
+        <div>
+          <button id="login-button" @click="login">></button>
+          login
+        </div>
       </div>
+      <div v-if="!signUp" id="create-account"></div>
 
       <div id="account-created" v-if="createdAccount">
         Account created successfully!
@@ -85,6 +65,7 @@
 </template>
 
 <script>
+// import firebase from "firebase";
 import Typed from "typed.js";
 
 export default {
@@ -93,7 +74,8 @@ export default {
   data() {
     return {
       signUp: false,
-      signIn: false,
+      username: "",
+      password: "",
       createdAccount: false,
       documentId: "uTixWrVf75KfC2D37iR8",
     };
@@ -101,19 +83,13 @@ export default {
   mounted() {
     const options = {
       strings: [".markdown"],
-      typeSpeed: 200,
+      typeSpeed: 100,
       showCursor: false,
     };
     new Typed("#title", options);
   },
   methods: {
-    showSignUp() {
-      this.signUp = true;
-      this.signIn = false;
-    },
-    showLogin() {
-      this.signIn = true;
-    },
+    create() {},
     login() {
       this.$router.push({
         name: "Markdown",
@@ -125,6 +101,9 @@ export default {
 </script>
 
 <style scoped>
+a {
+  color: inherit;
+}
 #app {
   font-family: "Avenir", sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -135,7 +114,6 @@ export default {
   color: #2c3e50;
 }
 #title-container {
-  height: 200px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -145,7 +123,7 @@ export default {
   font-size: 48px;
   font-weight: "bold";
   display: inline-block;
-  margin-top: 10rem;
+  margin-top: 5rem;
 }
 #login-form {
   display: flex;
@@ -176,6 +154,7 @@ export default {
   border-radius: 50%;
   height: 50px;
   width: 50px;
+  margin: 10px;
 }
 #login-button:hover {
   background-color: #ccc;
@@ -193,13 +172,7 @@ export default {
   border-radius: 15px;
 }
 #made-by-me {
-  /* position: absolute;
-  top: 90%; */
-  /* left: 50%;
-  right: 50%; */
   font-size: 14px;
   text-align: center;
-  display: grid;
-  grid-template-rows: auto 1fr auto;
 }
 </style>
