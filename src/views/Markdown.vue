@@ -6,11 +6,11 @@
 </template>
 
 <script>
-import Header from "../components/markdown/Header";
-import Editor from "../components/markdown/Editor";
+import Header from '../components/Header.vue';
+import Editor from '../components/Editor.vue';
 
 export default {
-  name: "Markdown",
+  name: 'Markdown',
   components: {
     Header,
     Editor,
@@ -25,7 +25,7 @@ export default {
 
 <style scoped>
 #app {
-  font-family: "Avenir", sans-serif;
+  font-family: 'Avenir', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   color: #2c3e50;

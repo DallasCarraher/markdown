@@ -8,7 +8,7 @@
     <div id="login-form">
       <!-- Email -->
       <div id="login-input-container">
-        <label for="name">Email &nbsp; &nbsp; &nbsp; &nbsp;</label>
+        <label for="name" id="input-label">Email‎‎‎‎‎‎‎‎‎‎‎</label>
         <input
           type="email"
           name="email"
@@ -21,7 +21,7 @@
       </div>
       <!-- Password -->
       <div id="login-input-container">
-        <label for="password">Password &nbsp;</label>
+        <label for="password" id="input-label">Password</label>
         <input
           type="password"
           name="password"
@@ -37,20 +37,16 @@
         <!-- signUp -->
         <div v-if="signUp">
           <button id="login-button" @click="create">+</button>
-          &nbsp; submit
+          submit
           <div>
             <button id="login-button" @click="signUp = !signUp">&lt;</button>
-            go back &nbsp;
+            go back
           </div>
         </div>
 
         <!-- signIn -->
         <div v-if="!signUp">
-          <button
-            id="login-button"
-            v-if="!createdAccount"
-            @click="signUp = !signUp"
-          >
+          <button id="login-button" v-if="!createdAccount" @click="signUp = !signUp">
             +
           </button>
           <p v-if="!createdAccount">create account</p>
@@ -62,10 +58,11 @@
         <div v-if="!signUp" id="create-account"></div>
       </div>
       <div id="account-created" v-if="response" @click="response = ''">
-        Account created successfully! &nbsp; X
+        Account created successfully! <button id="ok-button">x</button>
       </div>
-      <div id="error" v-if="errorMessage" @click="errorMessage = ''">
-        {{ errorMessage }} &nbsp; X
+      <div id="error" v-if="errorMessage && !response" @click="errorMessage = ''">
+        {{ errorMessage }}
+        <button id="ok-button">x</button>
       </div>
     </div>
 
@@ -75,39 +72,40 @@
 </template>
 
 <script>
-import firebase from "firebase";
-import Typed from "typed.js";
+import firebase from 'firebase';
+import Typed from 'typed.js';
 
 export default {
-  name: "Home",
+  name: 'Home',
   components: {},
   data() {
     return {
       signUp: false,
-      email: "",
-      password: "",
-      errorMessage: "",
-      response: "",
+      email: '',
+      password: '',
+      errorMessage: '',
+      response: '',
       createdAccount: false,
-      documentId: "uTixWrVf75KfC2D37iR8",
+      documentId: 'uTixWrVf75KfC2D37iR8',
     };
   },
   mounted() {
     const options = {
-      strings: [".markdown"],
+      strings: ['.markdown'],
       typeSpeed: 100,
       showCursor: false,
     };
-    new Typed("#title", options);
+    new Typed('#title', options);
   },
   methods: {
-    create: function() {
+    create() {
       firebase
         .auth()
         .createUserWithEmailAndPassword(this.email, this.password)
         .then((response) => {
           if (response) {
             this.response = response;
+            this.errorMessage = '';
             this.createdAccount = true;
             this.signUp = false;
           }
@@ -118,9 +116,9 @@ export default {
           }
         });
     },
-    login: function() {
+    login() {
       this.$router.push({
-        name: "Markdown",
+        name: 'Markdown',
         params: { documentId: this.documentId },
       });
     },
@@ -136,7 +134,7 @@ p {
   display: inline;
 }
 #app {
-  font-family: "Avenir", sans-serif;
+  font-family: 'Avenir', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   display: flex;
@@ -152,16 +150,9 @@ p {
 }
 #title {
   font-size: 48px;
-  font-weight: "bold";
+  font-weight: 'bold';
   display: inline-block;
   margin-top: 5rem;
-}
-#login-form {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  margin: 50px;
 }
 #login-input-container {
   margin-bottom: 20px;
@@ -176,6 +167,17 @@ p {
   font-size: 20px;
   padding: 10px;
 }
+#input-label {
+  margin-right: 20px;
+  display: table-cell;
+}
+#login-form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin: 50px;
+}
 #login-buttons {
   height: 150px;
 }
@@ -183,7 +185,7 @@ p {
   cursor: pointer;
   color: #2c3e50;
   font-size: 30px;
-  font-weight: "bold";
+  font-weight: 'bold';
   outline: 0;
   border: none;
   border-radius: 50%;
@@ -203,17 +205,35 @@ p {
 #account-created {
   margin-top: 20px;
   padding: 10px;
-  background-color: #c2fbef;
+  background-color: #2dd881;
+  color: white;
+  font-weight: bold;
   border-radius: 15px;
   cursor: pointer;
+}
+#account-created:hover {
+  opacity: 0.9;
 }
 #error {
   margin-top: 20px;
   padding: 10px;
   background-color: #ee4266;
   color: white;
+  font-weight: bold;
   border-radius: 15px;
   cursor: pointer;
+}
+#error:hover {
+  opacity: 0.9;
+}
+#ok-button {
+  margin-left: 10px;
+  font-size: 20px;
+  cursor: pointer;
+  color: white;
+  background-color: inherit;
+  outline: 0;
+  border: none;
 }
 #made-by-me {
   font-size: 14px;

@@ -4,11 +4,11 @@
 
 <script>
 export default {
-  name: "App",
+  name: 'App',
   components: {},
   data() {
     return {
-      documentId: "uTixWrVf75KfC2D37iR8",
+      documentId: 'uTixWrVf75KfC2D37iR8',
     };
   },
 };
