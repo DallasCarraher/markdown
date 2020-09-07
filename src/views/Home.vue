@@ -33,39 +33,49 @@
         />
       </div>
 
-      <!-- signUp -->
-      <div v-if="signUp">
-        <button id="login-button" @click="create">+</button>
-        &nbsp; submit
-        <div>
-          <button id="login-button" @click="signUp = !signUp">&lt;</button>
-          go back &nbsp;
+      <div id="login-buttons">
+        <!-- signUp -->
+        <div v-if="signUp">
+          <button id="login-button" @click="create">+</button>
+          &nbsp; submit
+          <div>
+            <button id="login-button" @click="signUp = !signUp">&lt;</button>
+            go back &nbsp;
+          </div>
         </div>
-      </div>
 
-      <!-- signIn -->
-      <div v-if="!signUp">
-        <button id="login-button" @click="signUp = !signUp">+</button>
-        create account
-        <div>
-          <button id="login-button" @click="login">></button>
-          login
+        <!-- signIn -->
+        <div v-if="!signUp">
+          <button
+            id="login-button"
+            v-if="!createdAccount"
+            @click="signUp = !signUp"
+          >
+            +
+          </button>
+          <p v-if="!createdAccount">create account</p>
+          <div>
+            <button id="login-button" @click="login">></button>
+            login
+          </div>
         </div>
+        <div v-if="!signUp" id="create-account"></div>
       </div>
-      <div v-if="!signUp" id="create-account"></div>
-
-      <div id="account-created" v-if="createdAccount">
-        Account created successfully!
+      <div id="account-created" v-if="response" @click="response = ''">
+        Account created successfully! &nbsp; X
       </div>
-
-      <!-- end of form -->
+      <div id="error" v-if="errorMessage" @click="errorMessage = ''">
+        {{ errorMessage }} &nbsp; X
+      </div>
     </div>
+
+    <!-- end of form -->
     <footer id="made-by-me">Made with ❤️ by Dallas Carraher</footer>
   </div>
 </template>
 
 <script>
-// import firebase from "firebase";
+import firebase from "firebase";
 import Typed from "typed.js";
 
 export default {
@@ -74,8 +84,10 @@ export default {
   data() {
     return {
       signUp: false,
-      username: "",
+      email: "",
       password: "",
+      errorMessage: "",
+      response: "",
       createdAccount: false,
       documentId: "uTixWrVf75KfC2D37iR8",
     };
@@ -89,8 +101,24 @@ export default {
     new Typed("#title", options);
   },
   methods: {
-    create() {},
-    login() {
+    create: function() {
+      firebase
+        .auth()
+        .createUserWithEmailAndPassword(this.email, this.password)
+        .then((response) => {
+          if (response) {
+            this.response = response;
+            this.createdAccount = true;
+            this.signUp = false;
+          }
+        })
+        .catch((error) => {
+          if (error) {
+            this.errorMessage = error.message;
+          }
+        });
+    },
+    login: function() {
       this.$router.push({
         name: "Markdown",
         params: { documentId: this.documentId },
@@ -103,6 +131,9 @@ export default {
 <style scoped>
 a {
   color: inherit;
+}
+p {
+  display: inline;
 }
 #app {
   font-family: "Avenir", sans-serif;
@@ -145,7 +176,11 @@ a {
   font-size: 20px;
   padding: 10px;
 }
+#login-buttons {
+  height: 150px;
+}
 #login-button {
+  cursor: pointer;
   color: #2c3e50;
   font-size: 30px;
   font-weight: "bold";
@@ -170,6 +205,15 @@ a {
   padding: 10px;
   background-color: #c2fbef;
   border-radius: 15px;
+  cursor: pointer;
+}
+#error {
+  margin-top: 20px;
+  padding: 10px;
+  background-color: #ee4266;
+  color: white;
+  border-radius: 15px;
+  cursor: pointer;
 }
 #made-by-me {
   font-size: 14px;
