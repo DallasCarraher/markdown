@@ -78,18 +78,18 @@ import Typed from 'typed.js';
 export default {
   name: 'Home',
   components: {},
-  data() {
-    return {
-      signUp: false,
-      email: '',
-      password: '',
-      errorMessage: '',
-      response: '',
-      createdAccount: false,
-      documentId: 'uTixWrVf75KfC2D37iR8',
-    };
-  },
+  data: () => ({
+    signUp: false,
+    email: '',
+    password: '',
+    errorMessage: '',
+    response: '',
+    createdAccount: false,
+    userId: '',
+    // documentId: 'uTixWrVf75KfC2D37iR8',
+  }),
   mounted() {
+    this.checkIfLoggedIn();
     const options = {
       strings: ['.markdown'],
       typeSpeed: 100,
@@ -98,6 +98,16 @@ export default {
     new Typed('#title', options);
   },
   methods: {
+    checkIfLoggedIn() {
+      const user = this.$store.getters.getUser;
+      user.uid
+        ? console.log(`currently logged in as: ${user.uid}.`)
+        : console.log('not logged in.');
+      if (user.uid) {
+        this.userId = user.uid;
+        this.navigate();
+      }
+    },
     create() {
       firebase
         .auth()
@@ -111,16 +121,28 @@ export default {
           }
         })
         .catch((error) => {
-          if (error) {
-            this.errorMessage = error.message;
-          }
+          this.errorMessage = error.message;
         });
     },
     login() {
-      this.$router.push({
-        name: 'Markdown',
-        params: { documentId: this.documentId },
-      });
+      firebase
+        .auth()
+        .signInWithEmailAndPassword(this.email, this.password)
+        .then((response) => {
+          this.$store.commit('setUser', response.user);
+          this.checkIfLoggedIn();
+        })
+        .catch((error) => {
+          this.errorMessage = error.message;
+        });
+    },
+    navigate() {
+      if (this.userId) {
+        this.$router.push({
+          name: 'Explorer',
+          params: { userId: this.userId },
+        });
+      }
     },
   },
 };
