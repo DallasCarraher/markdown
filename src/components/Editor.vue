@@ -115,9 +115,13 @@ export default {
   /* border-radius: 50px; */
   /* color: #2c3e50; */
   background-color: rgba(128, 128, 128, 0.194);
+  cursor: pointer;
+}
+#save-button:hover {
+  background-color: #ccc;
 }
 #save-button:active {
-  background-color: #ccc;
+  background-color: gray;
 }
 #editor {
   display: flex;
