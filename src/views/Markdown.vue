@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <Header />
+    <Header title=".markdown" previous="explorer" />
     <Editor :documentId="documentId" />
   </div>
 </template>
