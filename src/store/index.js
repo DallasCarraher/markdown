@@ -14,6 +14,7 @@ export default new Vuex.Store({
     setUser(state, payload) {
       state.user.uid = payload.uid;
       state.user.email = payload.email;
+      localStorage.setItem('uid', payload.uid);
     },
   },
   actions: {},

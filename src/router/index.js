@@ -1,6 +1,6 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
-import { Markdown, Home } from '../views';
+import { Home, Explorer, Markdown } from '../views';
 
 Vue.use(VueRouter);
 
@@ -9,6 +9,12 @@ const routes = [
     path: '/',
     name: 'Home',
     component: Home,
+  },
+  {
+    path: '/explorer/:userId',
+    name: 'Explorer',
+    component: Explorer,
+    props: true,
   },
   {
     path: '/markdown/:documentId',

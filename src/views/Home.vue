@@ -99,12 +99,10 @@ export default {
   },
   methods: {
     checkIfLoggedIn() {
-      const user = this.$store.getters.getUser;
-      user.uid
-        ? console.log(`currently logged in as: ${user.uid}.`)
-        : console.log('not logged in.');
-      if (user.uid) {
-        this.userId = user.uid;
+      const userId = localStorage.getItem('uid');
+      userId ? console.log(`currently logged in as: ${userId}.`) : console.log('not logged in.');
+      if (userId) {
+        this.userId = userId;
         this.navigate();
       }
     },
@@ -161,13 +159,10 @@ p {
   -moz-osx-font-smoothing: grayscale;
   display: flex;
   flex-flow: column;
-  height: 100%;
   color: #2c3e50;
 }
 #title-container {
   display: flex;
-  flex-direction: column;
-  align-items: center;
   justify-content: center;
 }
 #title {
