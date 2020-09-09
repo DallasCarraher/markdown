@@ -30,6 +30,6 @@ yarn test:unit
 yarn lint
 ```
 
-### Customize configuration
-
-See [Configuration Reference](https://cli.vuejs.org/config/).
+### Demo Account
+email: dallas.carraher@cdk.com
+password: dallas
