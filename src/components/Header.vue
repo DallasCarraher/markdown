@@ -4,11 +4,11 @@
       id="title"
       @mouseover="previousPage && (headerTitle = `← ${previousPage}`)"
       @mouseout="headerTitle = title"
-      @click="previousPage && navigate"
+      @click="navigate"
     >
       {{ headerTitle }}
     </h2>
-    <h2 id="sign-out" @click="signOut">
+    <h2 id="sign-out" v-if="signOutOption" @click="signOut">
       sign out
     </h2>
   </header>
@@ -21,6 +21,7 @@ export default {
   props: {
     title: String,
     previous: String,
+    signOutOption: Boolean,
   },
   data() {
     return {
@@ -30,8 +31,10 @@ export default {
   },
   methods: {
     navigate() {
+      if (this.previousPage === 'home') {
+        this.signOut();
+      }
       const userId = localStorage.getItem('uid');
-      console.log(userId);
       if (userId) {
         this.$router.push({
           name: this.previousPage,
@@ -42,7 +45,7 @@ export default {
     signOut() {
       localStorage.removeItem('uid');
       this.$router.push({
-        name: 'Home',
+        name: 'home',
       });
     },
   },
@@ -59,7 +62,7 @@ export default {
 }
 #title {
   flex-direction: row;
-  flex: 12;
+  flex: 8;
   font-weight: 'bold';
   cursor: pointer;
 }

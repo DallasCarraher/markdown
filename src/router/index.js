@@ -7,18 +7,18 @@ Vue.use(VueRouter);
 const routes = [
   {
     path: '/',
-    name: 'Home',
+    name: 'home',
     component: Home,
   },
   {
     path: '/explorer/:userId',
-    name: 'Explorer',
+    name: 'explorer',
     component: Explorer,
     props: true,
   },
   {
     path: '/markdown/:documentId',
-    name: 'Markdown',
+    name: 'markdown',
     component: Markdown,
   },
   {

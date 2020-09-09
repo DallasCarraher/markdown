@@ -137,7 +137,7 @@ export default {
     navigate() {
       if (this.userId) {
         this.$router.push({
-          name: 'Explorer',
+          name: 'explorer',
           params: { userId: this.userId },
         });
       }

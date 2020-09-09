@@ -1,6 +1,6 @@
 <template>
   <div id="explorer">
-    <Header title="explorer" />
+    <Header title="explorer" previous="home" signOutOption />
     <div class="lds-dual-ring" v-if="loading"></div>
   </div>
 </template>
