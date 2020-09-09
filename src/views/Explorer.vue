@@ -1,12 +1,23 @@
 <template>
   <div id="explorer">
     <Header title="explorer" previous="home" signOutOption />
-    <div class="lds-dual-ring" v-if="loading"></div>
+    <div id="documents">
+      <div v-for="file in files" :key="file.data().uid" @click="openDoc(file.id)">
+        <div>{{ file.data().title }}</div>
+        <br />
+        Preview:
+        <div>{{ file.data().text.substr(0, 10) }}</div>
+      </div>
+    </div>
+    <div id="loading-container" v-if="loading">
+      Loading Documents
+      <div class="lds-dual-ring" />
+    </div>
   </div>
 </template>
 
 <script>
-import firebase from 'firebase';
+import db from '../config/firebaseInit';
 import { Header } from '../components';
 
 export default {
@@ -20,15 +31,46 @@ export default {
   data() {
     return {
       loading: false,
+      files: [],
     };
   },
   mounted() {
     this.checkIfLoggedIn();
+    this.loading = true;
+    this.query();
+    setTimeout(() => {
+      this.loading = false;
+    }, 1000);
   },
   updated() {
     this.checkIfLoggedIn();
   },
   methods: {
+    async query() {
+      const docs = [];
+      await db
+        .collection('files')
+        .where('owner', '==', this.userId)
+        .get()
+        .then(function(querySnapshot) {
+          querySnapshot.forEach(function(doc) {
+            console.log(doc.id, ' => ', doc.data());
+            docs.push(doc);
+          });
+        })
+        .catch(function(error) {
+          console.log('Error getting documents: ', error);
+          this.loading = false;
+        });
+      console.log(docs);
+      this.files = docs;
+    },
+    openDoc(documentId) {
+      this.$router.push({
+        name: 'markdown',
+        params: { documentId },
+      });
+    },
     checkIfLoggedIn() {
       const userId = localStorage.getItem('uid');
       if (!userId) {
@@ -51,10 +93,32 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   color: #2c3e50;
 }
+#loading-container {
+  display: flex;
+  flex-flow: column;
+  align-items: center;
+  margin-top: 10rem;
+}
+#documents {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(100px, 2fr));
+  grid-gap: 5rem;
+  margin: 20px;
+}
+#documents > div {
+  background: rgb(2, 245, 152);
+  padding: 1.5rem;
+  border-radius: 0.75rem;
+  height: 5rem;
+  width: 5rem;
+  text-align: center;
+  word-wrap: break-word;
+}
 .lds-dual-ring {
   display: inline-block;
   width: 20px;
   height: 20px;
+  margin-right: 50px;
 }
 .lds-dual-ring:after {
   content: ' ';
