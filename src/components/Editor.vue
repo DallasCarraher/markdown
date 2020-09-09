@@ -58,7 +58,7 @@ export default {
         const document = await db.collection('files').doc(this.documentId);
         this.documentRef = document;
         await document.get().then((doc) => {
-          console.log(doc.data());
+          // console.log(doc.data());
           this.loadData({
             id: doc.id,
             owner: doc.data().owner,
@@ -77,7 +77,7 @@ export default {
       this.savedAt = data.savedAtl;
       this.text = data.text;
     },
-    compile: debounce(function(e) {
+    compile: debounce(function (e) {
       this.text = e.target.value;
     }, 0),
     // autoSave: function () {
