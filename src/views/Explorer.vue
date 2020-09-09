@@ -4,8 +4,7 @@
     <div id="documents">
       <div v-for="file in files" :key="file.data().uid" @click="openDoc(file.id)">
         <div>{{ file.data().title }}</div>
-        <br />
-        Preview:
+        <br />Preview:
         <div>{{ file.data().text.substr(0, 10) }}</div>
       </div>
     </div>
@@ -52,13 +51,13 @@ export default {
         .collection('files')
         .where('owner', '==', this.userId)
         .get()
-        .then(function(querySnapshot) {
-          querySnapshot.forEach(function(doc) {
+        .then(function (querySnapshot) {
+          querySnapshot.forEach(function (doc) {
             console.log(doc.id, ' => ', doc.data());
             docs.push(doc);
           });
         })
-        .catch(function(error) {
+        .catch(function (error) {
           console.log('Error getting documents: ', error);
           this.loading = false;
         });
@@ -116,7 +115,8 @@ export default {
   cursor: pointer;
 }
 #documents > div:hover {
-  background: rgb(2, 245, 255);
+  background: rgb(1, 193, 119);
+  color: white;
 }
 .lds-dual-ring {
   display: inline-block;
