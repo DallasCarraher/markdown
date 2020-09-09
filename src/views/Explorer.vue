@@ -113,6 +113,10 @@ export default {
   width: 5rem;
   text-align: center;
   word-wrap: break-word;
+  cursor: pointer;
+}
+#documents > div:hover {
+  background: rgb(2, 245, 255);
 }
 .lds-dual-ring {
   display: inline-block;
