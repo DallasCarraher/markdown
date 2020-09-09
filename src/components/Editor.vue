@@ -77,7 +77,7 @@ export default {
       this.savedAt = data.savedAtl;
       this.text = data.text;
     },
-    compile: debounce((e) => {
+    compile: debounce(function(e) {
       this.text = e.target.value;
     }, 0),
     // autoSave: function () {
