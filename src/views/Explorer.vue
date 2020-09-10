@@ -5,7 +5,7 @@
       <div v-for="file in files" :key="file.data().uid" @click="openDoc(file.id)">
         <div id="file-title">{{ file.data().title }}</div>
         <br />
-        <div id="plus" v-if="!file.data().text">+</div>
+        <div id="plus" v-if="!file.data().uid">+</div>
         <div id="preview" v-if="file.data().text">Preview:</div>
         <div v-if="file.data().text">{{ file.data().text.substr(0, 50) }}</div>
       </div>
@@ -18,7 +18,9 @@
 </template>
 
 <script>
+import firebase from 'firebase';
 import db from '../config/firebaseInit';
+import { nanoid } from 'nanoid';
 import { Header } from '../components';
 
 export default {
@@ -72,11 +74,29 @@ export default {
       });
       this.files = [...this.files, ...docs];
     },
+    async addDocument() {
+      const documentId = nanoid();
+      await db
+        .collection('files')
+        .doc(documentId)
+        .set({
+          owner: this.userId,
+          savedAt: firebase.firestore.FieldValue.serverTimestamp(),
+          text: '',
+          title: `newDoc-${documentId}`,
+          uid: documentId,
+        });
+      this.openDoc(documentId);
+    },
     openDoc(documentId) {
-      this.$router.push({
-        name: 'markdown',
-        params: { documentId },
-      });
+      if (!documentId) {
+        this.addDocument();
+      } else {
+        this.$router.push({
+          name: 'markdown',
+          params: { documentId },
+        });
+      }
     },
     checkIfLoggedIn() {
       const userId = localStorage.getItem('uid');
@@ -108,16 +128,16 @@ export default {
 }
 #documents {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(100px, 2fr));
-  grid-gap: 10rem;
-  margin: 20px;
+  grid-template-columns: repeat(auto-fill, minmax(12rem, 1fr));
+  grid-gap: 3rem;
+  margin: 3rem;
 }
 #documents > div {
   background: rgb(2, 245, 152);
   padding: 1.5rem;
   border-radius: 0.75rem;
   height: 10rem;
-  width: 10rem;
+  /* width: 10rem; */
   text-align: center;
   word-wrap: break-word;
   cursor: pointer;

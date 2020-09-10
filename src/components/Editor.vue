@@ -1,7 +1,20 @@
 <template>
   <div>
     <div id="toolbar">
-      <button id="save-button" @click="save">Save</button>
+      <button id="toolbar-button" @click="save">Save</button>
+      <button id="toolbar-button" @click="rename">Rename</button>
+      <input
+        id="rename-text"
+        type="text"
+        maxlength="30"
+        ref="rename"
+        v-if="this.renameMode"
+        v-model="renameText"
+      />
+      <button id="submit-rename" v-if="this.renameText !== ''" @click="submitRename">✔</button>
+      <div id="doc-title">
+        <h3 v-if="this.title">Document Name: {{ this.title }}</h3>
+      </div>
     </div>
     <div id="editor">
       <textarea
@@ -32,11 +45,14 @@ export default {
   data() {
     return {
       id: 100000,
+      title: '',
       owner: 'None',
       savedAt: null,
       text: '# start editing',
       documentRef: null,
       autoSaveRef: null,
+      renameMode: false,
+      renameText: '',
     };
   },
   computed: {
@@ -61,6 +77,7 @@ export default {
           // console.log(doc.data());
           this.loadData({
             id: doc.id,
+            title: doc.data().title,
             owner: doc.data().owner,
             savedAt: doc.data().savedAt,
             text: doc.data().text,
@@ -73,6 +90,7 @@ export default {
     },
     loadData(data) {
       this.id = data.id;
+      this.title = data.title;
       this.owner = data.owner;
       this.savedAt = data.savedAtl;
       this.text = data.text;
@@ -87,6 +105,7 @@ export default {
       try {
         if (this.documentRef) {
           await this.documentRef.update({
+            title: this.title,
             text: this.text,
             savedAt: firebase.firestore.FieldValue.serverTimestamp(),
           });
@@ -94,6 +113,20 @@ export default {
       } catch (e) {
         console.error(e);
       }
+    },
+    rename() {
+      this.renameMode = !this.renameMode;
+      if (this.renameMode) {
+        this.$nextTick(() => this.$refs.rename.focus());
+      } else {
+        this.renameText = '';
+      }
+    },
+    async submitRename() {
+      this.title = this.renameText;
+      this.rename();
+      await this.save();
+      await this.fetchData();
     },
   },
 };
@@ -104,23 +137,52 @@ export default {
   display: flex;
   border-bottom: 1px solid #ccc;
 }
-#save-button {
-  top: 8%;
-  left: 42%;
+#doc-title {
+  /* position: fixed;
+  left: 70%;
+  margin-top: 10px; */
+  margin-left: auto;
+  margin-top: 5px;
+  margin-right: 1rem;
+}
+#rename-text {
+  font-size: 16px;
+  border: 1px solid rgba(128, 128, 128, 0.194);
+  padding: 10px;
+  /* background-color: rgba(128, 128, 128, 0.194); */
+  /* outline: 0; */
+}
+#submit-rename {
+  font-size: 16px;
+  outline: 0;
+  border: none;
+  padding: 10px;
+  /* border: 1px solid rgba(128, 128, 128, 0.194); */
+  /* border-radius: 20%; */
+}
+#submit-rename:hover {
+  background-color: #ccc;
+}
+#submit-rename:active {
+  background-color: gray;
+}
+#toolbar-button {
+  /* top: 8%; */
+  /* left: 42%; */
   padding: 10px;
   font-size: 16px;
   font-weight: 'bold';
   outline: 0;
-  border: none;
+  border: 1px solid rgba(128, 128, 128, 0.194);
   /* border-radius: 50px; */
   /* color: #2c3e50; */
   background-color: rgba(128, 128, 128, 0.194);
   cursor: pointer;
 }
-#save-button:hover {
+#toolbar-button:hover {
   background-color: #ccc;
 }
-#save-button:active {
+#toolbar-button:active {
   background-color: gray;
 }
 #editor {
