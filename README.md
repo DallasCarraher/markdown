@@ -29,7 +29,3 @@ yarn test:unit
 ```
 yarn lint
 ```
-
-### Demo Account
-email: dallas.carraher@cdk.com
-password: dallas
